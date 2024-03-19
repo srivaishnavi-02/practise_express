@@ -21,7 +21,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('tiny'));
 app.use(methodOverride('_method'));
 
-MongoClient.connect(url)
+//connect to database
+// MongoClient.connect(url, { useUnifiedTopology: true }, (err, client)=>{
+//     if(err){
+//         console.log(err.message);
+//     }else{
+//         db = client.db('demos');
+//         //start the server
+//         app.listen(port, host, () => {
+//             console.log('The server is running at port', port);
+//         });
+//     }
+// });
+
+MongoClient.connect(url, { useUnifiedTopology: true })
 .then(client => {
     db = client.db('demos');
     getCollection(db);
@@ -32,6 +45,7 @@ MongoClient.connect(url)
 })
 .catch(err=> console.log(err.message));
 
+//set up routes
 app.get('/', (req, res) => {
     res.render('index');
 });
